@@ -1,0 +1,5 @@
+# tracker server config
+# shared directory
+torrents
+# port
+3490

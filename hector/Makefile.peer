@@ -1,0 +1,17 @@
+# builds the peer program and copies to peer1/ peer2/ peer3/
+
+CC = gcc
+CFLAGS = -Wall -g
+
+all: peer deploy
+
+peer: peer.c
+	$(CC) $(CFLAGS) -o peer peer.c -lpthread
+
+deploy:
+	cp peer peer1/peer
+	cp peer peer2/peer
+	cp peer peer3/peer
+
+clean:
+	rm -f peer peer1/peer peer2/peer peer3/peer
