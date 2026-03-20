@@ -5,15 +5,13 @@
 int main() {
     char buf[1024];
 
-    // =========================
     // TEST pack_createtracker
-    // =========================
+    
     pack_createtracker(buf, "movie1.avi", 1000, "Ghost", "abc123", "127.0.0.1", 5001);
     printf("PACK CREATE:\n%s\n", buf);
 
-    // =========================
     // TEST parse_createtracker
-    // =========================
+
     char filename[100], desc[100], md5[100], ip[50];
     long filesize;
     int port;
@@ -28,21 +26,17 @@ int main() {
     printf("ip: %s\n", ip);
     printf("port: %d\n\n", port);
 
-    // =========================
     // TEST LIST
-    // =========================
+
     pack_list(buf);
     printf("PACK LIST:\n%s\n", buf);
 
-    // =========================
     // TEST GET
-    // =========================
     pack_get(buf, "movie1.avi");
     printf("PACK GET:\n%s\n", buf);
 
-    // =========================
     // TEST UPDATE
-    // =========================
+    
     pack_updatetracker(buf, "movie1.avi", 0, 1024, "127.0.0.1", 5001);
     printf("PACK UPDATE:\n%s\n", buf);
 
