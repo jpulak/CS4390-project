@@ -47,7 +47,7 @@ int read_chunk(const char *filepath, long offset, char *buf, int max_len)
     int n = (int)fread(buf, 1, (size_t)max_len, f);
     fclose(f);
     return n;  
-
+}
 
 int write_chunk(const char *filepath, long offset, const char *data, int len)
 {
