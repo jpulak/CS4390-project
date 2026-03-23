@@ -43,10 +43,10 @@ void handle_createtracker(int sock, char* buffer) {
         return;
     }
 
-    // write metadata
+    
     fprintf(fp, "%s %d %s %s\n", filename, filesize, description, md5);
 
-    // initial peer
+    
     fprintf(fp, "%s %d 0 %d %ld\n", ip, port, filesize, time(NULL));
 
     fclose(fp);
@@ -132,7 +132,7 @@ void handle_get(int sock, char* buffer) {
 
     fclose(fp);
 
-    // 🔥 use YOUR MD5 function here
+    
     char* md5 = compute_file_md5(path);
 
     char response[512];
@@ -172,7 +172,7 @@ void handle_updatetracker(int sock, char* buffer) {
 
     char line[1024];
 
-    // copy metadata line
+    
     fgets(line, sizeof(line), fp);
     fputs(line, temp);
 
