@@ -9,6 +9,7 @@
 #include <dirent.h>
 #include <time.h>
 #include <sys/stat.h>
+#include "module/md5_util.h"
 
 pthread_mutex_t tracker_lock = PTHREAD_MUTEX_INITIALIZER;
 
@@ -56,8 +57,11 @@ void handle_createtracker(int sock, char* buffer) {
 }
 
 void handle_list(int sock) {
+    pthread_mutex_lock(&tracker_lock);
+
     DIR* dir = opendir("torrents/");
     if (!dir) {
+        pthread_mutex_unlock(&tracker_lock);
         write(sock, "<REP LIST 0>\n<REP LIST END>\n", 30);
         return;
     }
@@ -101,6 +105,7 @@ void handle_list(int sock) {
     }
 
     closedir(dir);
+    pthread_mutex_unlock(&tracker_lock);
 
     write(sock, "<REP LIST END>\n", 15);
 }
@@ -117,8 +122,11 @@ void handle_get(int sock, char* buffer) {
     char path[512];
     sprintf(path, "torrents/%s", filename);
 
+    pthread_mutex_lock(&tracker_lock);
+
     FILE* fp = fopen(path, "r");
     if (!fp) {
+        pthread_mutex_unlock(&tracker_lock);
         write(sock, "File not found\n", 15);
         return;
     }
@@ -140,6 +148,7 @@ void handle_get(int sock, char* buffer) {
     write(sock, response, strlen(response));
 
     free(md5);
+    pthread_mutex_unlock(&tracker_lock);
 }
 
 #define UPDATE_INTERVAL 60
