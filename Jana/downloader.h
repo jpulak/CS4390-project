@@ -1,16 +1,33 @@
-
-//header guards
 #ifndef DOWNLOADER_H
 #define DOWNLOADER_H
 
-#include <stdio.h>
 #include "protocol.h"
+#include "file_utils.h"
+#include "md5_util.h"
 
-// download file from the tracker/peer
-//host is the IP address of tracker/peer
-//port is port number
-// 0 on success -1 if failure
+#include <pthread.h>
 
-int download_file(const char* host, int port, const char* filename);
+// peer info
+typedef struct {
+    char ip[64];
+    int port;
+    long timestamp;
+} PeerInfo;
 
-#endif //end guard
+// thread task
+typedef struct {
+    char filename[256];
+    char ip[64];
+    int port;
+    long start;
+    long end;
+} DownloadTask;
+
+// main coordinator (FINAL REQUIRED FUNCTION)
+int multi_peer_download(const char* filename,
+                        PeerInfo* peers,
+                        int num_peers,
+                        long filesize,
+                        const char* state_file);
+
+#endif
