@@ -1,19 +1,26 @@
-// run tracker before running test_downloader
-//cc downloader.c protocol.c test_downloader.c -o test_downloader -lpthread ./test_downloader
 #include "downloader.h"
-#include <stdio.h>
+#include <string.h>
 
-int main() 
+int main()
 {
-    //call download file to download the testfile from local prot 3490
-    printf("Downloading TEST_FILE.txt from tracker...\n");
-    if(download_file("127.0.0.1", 3490, "TEST_FILE.txt") == 0) 
-    {
-        printf("Download succeeded! Check downloaded.txt\n"); //successful
-    } 
-    else 
-    {
-        printf("Download failed!\n"); //not successful
-    }
+    PeerInfo peers[2];
+
+    // fake local peers (for testing)
+    strcpy(peers[0].ip, "127.0.0.1");
+    peers[0].port = 5001;
+    peers[0].timestamp = 100;
+
+    strcpy(peers[1].ip, "127.0.0.1");
+    peers[1].port = 5002;
+    peers[1].timestamp = 200;
+
+    multi_peer_download(
+        "downloaded.txt",
+        peers,
+        2,
+        5000,
+        "state.txt"
+    );
+
     return 0;
 }
