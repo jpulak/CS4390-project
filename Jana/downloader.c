@@ -10,7 +10,7 @@
 #define CHUNK_SIZE 1024
 
 
-// ---------------- THREAD FUNCTION ----------------
+//thread func
 void* download_segment(void* arg)
 {
     DownloadTask* task = (DownloadTask*)arg;
@@ -26,14 +26,16 @@ void* download_segment(void* arg)
     server_addr.sin_port = htons(task->port);
     inet_pton(AF_INET, task->ip, &server_addr.sin_addr);
 
-    if (connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) {
+    if (connect(sockfd, (struct sockaddr*)&server_addr, sizeof(server_addr)) < 0) 
+    {
         close(sockfd);
         pthread_exit(NULL);
     }
 
     long offset = task->start;
 
-    while (offset < task->end) {
+    while (offset < task->end) 
+    {
 
         long chunk_end = offset + CHUNK_SIZE - 1;
         if (chunk_end > task->end) chunk_end = task->end;
@@ -49,7 +51,7 @@ void* download_segment(void* arg)
         int n = recv(sockfd, buffer, CHUNK_SIZE, 0);
         if (n <= 0) break;
 
-        // WRITE USING ALICES FUNCTION (IMPORTANT)
+        // write using alice's func
         write_chunk(task->filename, offset, buffer, n);
 
         offset += n;
@@ -65,7 +67,7 @@ void* download_segment(void* arg)
 }
 
 
-// ---------------- MAIN COORDINATOR ----------------
+// maian coordinator
 int multi_peer_download(const char* filename,
                         PeerInfo* peers,
                         int num_peers,
@@ -98,7 +100,7 @@ int multi_peer_download(const char* filename,
 
     printf("[INFO] All threads complete. Verifying file...\n");
 
-    // ---------------- MD5 CHECK (RODRIGO) ----------------
+    // md5 check form rodrigo
     char* hash = compute_file_md5(filename);
 
     if (hash) {
@@ -107,7 +109,7 @@ int multi_peer_download(const char* filename,
         printf("[MD5 ERROR]\n");
     }
 
-    // ---------------- MERGE CHECK ----------------
+    // merge check
     merge_chunks(filename);
 
     printf("[DONE] Download complete: %s\n", filename);
